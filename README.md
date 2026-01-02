@@ -17,10 +17,34 @@ The repository is setup so that you can manage your packages entirely from the G
 
 To run locally you will need:
 
-- Powershell 5+.
-- [Chocolatey Automatic Package Updater Module](https://github.com/chocolatey-community/chocolatey-au): `Install-Module Chocolatey-AU` or `choco install chocolatey-au`.
+- PowerShell 5.1+ or PowerShell 7+
+- [Chocolatey Automatic Package Updater Module](https://github.com/chocolatey-community/chocolatey-au): `Install-Module Chocolatey-AU` or `choco install chocolatey-au`
+
+**PowerShell 7 Users:** This template includes compatibility workarounds for PowerShell 7.3.0+ breaking changes. See [POWERSHELL7.md](POWERSHELL7.md) for details.
+
+## CI/CD Options
+
+This template supports both AppVeyor and GitHub Actions for automated package updates.
+
+### AppVeyor Setup
 
 In order to setup AppVeyor update runner please take a look at the AU wiki [AppVeyor section](https://github.com/chocolatey-beam/au-packages-template/wiki/AppVeyor).
+
+### GitHub Actions Setup
+
+GitHub Actions workflows are included in `.github/workflows/`:
+
+- `update.yml` - Automatic package updates (disabled by default)
+- `validate.yml` - PSScriptAnalyzer validation on push/PR
+
+**To enable the update workflow:**
+1. Uncomment the `on:` section in `.github/workflows/update.yml`
+2. Configure repository secrets:
+   - `API_KEY` - GitHub API token for gist updates
+   - `CHOCOLATEY_API_KEY` - Chocolatey API key for package pushes
+3. Update `gist_id` in the workflow with your gist ID
+
+**Validation workflow** runs automatically on push and pull requests to ensure code quality.
 
 ## Create a package
 
