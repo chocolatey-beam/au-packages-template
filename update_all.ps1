@@ -2,6 +2,12 @@
 
 param([string[]] $Name, [string] $ForcedPackages, [string] $Root = $PSScriptRoot)
 
+# PowerShell 7 compatibility: Use legacy argument passing to avoid empty string bug
+# See: https://learn.microsoft.com/en-us/powershell/scripting/whats-new/what-s-new-in-powershell-73#psnativecommandargumentpassing
+if ($PSVersionTable.PSVersion.Major -ge 7) {
+    $PSNativeCommandArgumentPassing = 'Legacy'
+}
+
 if (Test-Path $PSScriptRoot/update_vars.ps1) { . $PSScriptRoot/update_vars.ps1 }
 
 $Options = [ordered]@{

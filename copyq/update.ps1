@@ -1,4 +1,4 @@
-import-module au
+Import-Module Chocolatey-AU
 . $PSScriptRoot\..\_scripts\all.ps1
 
 $releases    = 'https://github.com/hluk/CopyQ/releases'
