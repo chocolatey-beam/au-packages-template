@@ -39,7 +39,7 @@ $Options = [ordered]@{
     )
     #RepeatSleep   = 250                                    #How much to sleep between repeats in seconds, by default 0
     #RepeatCount   = 2                                      #How many times to repeat on errors, by default 1
-    
+
     #NoCheckChocoVersion = $true                            #Turn on this switch for all packages
 
     Report = @{
@@ -102,7 +102,7 @@ $Options = [ordered]@{
         param($PackageName, $Options )
 
         $pattern = "^${PackageName}(?:\\(?<stream>[^:]+))?(?:\:(?<version>.+))?$"
-        $p = $Options.ForcedPackages | ? { $_ -match $pattern }
+        $p = $Options.ForcedPackages | Where-Object { $_ -match $pattern }
         if (!$p) { return }
 
         $global:au_Force         = $true
@@ -111,7 +111,7 @@ $Options = [ordered]@{
     }
 }
 
-if ($ForcedPackages) { Write-Host "FORCED PACKAGES: $ForcedPackages" }
+if ($ForcedPackages) { Write-Information "FORCED PACKAGES: $ForcedPackages" }
 $global:au_Root         = $Root          #Path to the AU packages
 $global:au_GalleryUrl   = ''             #URL to package gallery, leave empty for Chocolatey Gallery
 $global:info = updateall -Name $Name -Options $Options
