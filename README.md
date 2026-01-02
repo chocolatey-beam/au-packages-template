@@ -10,7 +10,7 @@
 <!-- REMOVE THE squiggles "~" surrounding this (this should not be a code block) -->
 ~~~
 
-This repository contains [chocolatey automatic packages](https://chocolatey.org/docs/automatic-packages).  
+This repository contains [chocolatey automatic packages](https://chocolatey.org/docs/automatic-packages).
 The repository is setup so that you can manage your packages entirely from the GitHub web interface (using AppVeyor to update and push packages) and/or using the local repository copy.
 
 ## Prerequisites
@@ -37,12 +37,48 @@ GitHub Actions workflows are included in `.github/workflows/`:
 - `update.yml` - Automatic package updates (disabled by default)
 - `validate.yml` - PSScriptAnalyzer validation on push/PR
 
-**To enable the update workflow:**
-1. Uncomment the `on:` section in `.github/workflows/update.yml`
-2. Configure repository secrets:
-   - `API_KEY` - GitHub API token for gist updates
-   - `CHOCOLATEY_API_KEY` - Chocolatey API key for package pushes
-3. Update `gist_id` in the workflow with your gist ID
+#### Step 1: Create a Gist for Update Reports
+
+1. Go to https://gist.github.com and create a new gist
+2. Name it something like "AU Package Update Status"
+3. Add a placeholder file (will be overwritten by workflow)
+4. Copy the gist ID from the URL (e.g., `https://gist.github.com/username/abc123` → gist ID is `abc123`)
+
+#### Step 2: Configure Repository Secrets
+
+Go to your repository Settings → Secrets and variables → Actions, and add:
+
+- `API_KEY` - GitHub Personal Access Token with `gist` scope
+  - Create at https://github.com/settings/tokens
+  - Select `gist` permission
+  - Copy the token value
+
+- `CHOCOLATEY_API_KEY` - Your Chocolatey API key
+  - Get from https://community.chocolatey.org/account
+  - Copy your API key
+
+#### Step 3: Enable the Update Workflow
+
+Edit `.github/workflows/update.yml`:
+
+1. Uncomment the `on:` section (lines 2-6)
+2. Update `gist_id` with your gist ID from Step 1
+3. Optionally adjust the schedule (default: weekly on Sunday at 5:30 AM UTC)
+
+Example:
+```yaml
+on:
+  workflow_dispatch:  # Manual trigger
+  schedule:
+    - cron: '30 5 * * 0'  # Weekly on Sunday at 5:30 AM UTC
+```
+
+#### Step 4: Test the Workflow
+
+1. Go to Actions tab in your repository
+2. Select "update-au-packages" workflow
+3. Click "Run workflow" to test manually
+4. Verify it runs without errors
 
 **Validation workflow** runs automatically on push and pull requests to ensure code quality.
 
@@ -60,15 +96,15 @@ In a package directory run: `Test-Package`. This function can be used to start t
 ### Single package
 
 Run from within the directory of the package to update that package:
-   
+
     cd <package_dir>
     ./update.ps1
- 
-If this script is missing, the package is not automatic.  
+
+If this script is missing, the package is not automatic.
 Set `$au_Force = $true` prior to script call to update the package even if no new version is found.
 
 ### Multiple packages
- 
+
 To update all packages run `./Update-Packages.ps1`. It accepts few options:
 
 ```powershell
@@ -111,14 +147,14 @@ You can force package update and push using git commit message. AppVeyor build i
 If commit message includes `[AU <forced_packages>]` message on the first line, the `forced_packages` string will be sent to the updater.
 
 Examples:
-- `[AU pkg1 pkg2]`  
+- `[AU pkg1 pkg2]`
 Force update ONLY packages `pkg1` and `pkg2`.
-- `[AU pkg1:ver1 pkg2 non_existent]`  
+- `[AU pkg1:ver1 pkg2 non_existent]`
 Force `pkg1` and use explicit version `ver1`, force `pkg2` and ignore `non_existent`.
 
 To see how versions behave when package update is forced see the [force documentation](https://github.com/chocolatey-community/chocolatey-au/blob/develop/README.md#force-update).
 
-You can also push manual packages with command `[PUSH pkg1 ... pkgN]`. This works for any package anywhere in the file hierarchy and will not invoke AU updater at all. 
+You can also push manual packages with command `[PUSH pkg1 ... pkgN]`. This works for any package anywhere in the file hierarchy and will not invoke AU updater at all.
 
 If there are no changes in the repository use `--allow-empty` git parameter:
 
@@ -137,4 +173,4 @@ To use this system with your own packages do the following steps:
 Add your own packages now, with this in mind:
 * You can keep both manual and automatic packages together. To get only AU packages any time use `Get-AUPackages` function (alias `lsau` or `gau`)
 * Keep all package additional files in the package directory (icons, screenshots etc.). This keeps everything related to one package in its own directory so it is easy to move it around or remove it.
- 
+
