@@ -13,16 +13,29 @@
 6. Update any code examples with correct module name
 7. Add GitHub Actions workflow documentation alongside AppVeyor
 
-## Code Updates (In Progress)
+## Code Updates
 
 - [x] Phase 1: Assessment complete
-- [ ] Phase 2: Core updates (module names, PSScriptAnalyzer fixes)
-- [ ] Phase 3: Add GitHub Actions workflows
-- [ ] Phase 4: Documentation updates
+- [x] Phase 2: Core updates (module names, PSScriptAnalyzer fixes, formatting)
+- [x] Phase 3: Add GitHub Actions workflows
+- [x] Phase 4: Documentation updates (POWERSHELL7.md, README)
 
-## Future Considerations
+## Remaining Tasks
 
-- Test all sample packages work with updated code
-- Verify AppVeyor config still works
-- Consider adding POWERSHELL7.md document
-- Update any screenshots or examples in wiki
+### High Priority
+
+1. **Create Invoke-Validation.ps1** - PSScriptAnalyzer validation script for template
+2. **Update .gitignore** - Ensure all generated files are excluded
+3. **Complete GitHub Actions setup docs** - Explain secrets, gist setup in README
+4. **Test sample packages** - Verify copyq, less, librecad, prey still work
+
+### Medium Priority
+
+5. **Wiki updates** - Update all content in `au-packages-template.wiki` repository
+6. **Test AppVeyor config** - Verify it still works with renamed scripts
+7. **Add examples** - Show complete setup workflow for new users
+
+### Low Priority
+
+8. **Update screenshots** - If wiki has any outdated images
+9. **Review sample packages** - Consider if better examples exist

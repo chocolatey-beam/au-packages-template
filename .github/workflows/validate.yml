@@ -17,10 +17,4 @@ jobs:
       - shell: pwsh
         run: Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
       - shell: pwsh
-        run: |
-          $results = Invoke-ScriptAnalyzer -Path . -Recurse -Settings .\PSScriptAnalyzerSettings.psd1
-          if ($results) {
-            $results | Format-Table -AutoSize
-            exit 1
-          }
-          Write-Host "All PSScriptAnalyzer checks passed!"
+        run: ${{ github.workspace }}\Invoke-Validation.ps1
