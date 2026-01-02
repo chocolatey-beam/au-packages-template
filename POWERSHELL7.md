@@ -37,7 +37,7 @@ In PowerShell 7, the empty string gets passed as `""`, which `choco` interprets 
 
 ## Solution
 
-This template includes a workaround in `update_all.ps1`:
+This template includes a workaround in `Update-Packages.ps1`:
 
 ```powershell
 # PowerShell 7 compatibility: Use legacy argument passing to avoid empty string bug
@@ -69,7 +69,7 @@ To verify the workaround works, test with PowerShell 7:
 ```powershell
 # Should complete without "file not found" errors
 $env:au_Push = 'false'
-.\update_all.ps1 -ForcedPackages 'your-package'
+.\Update-Packages.ps1 -ForcedPackages 'your-package'
 ```
 
 ## References

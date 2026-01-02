@@ -69,24 +69,24 @@ Set `$au_Force = $true` prior to script call to update the package even if no ne
 
 ### Multiple packages
  
-To update all packages run `./update_all.ps1`. It accepts few options:
+To update all packages run `./Update-Packages.ps1`. It accepts few options:
 
 ```powershell
-./update_all.ps1 -Name a*                         # Update all packages which name start with letter 'a'
-./update_all.ps1 -ForcedPackages 'cpu-z copyq'    # Update all packages and force cpu-z and copyq
-./update_all.ps1 -ForcedPackages 'copyq:1.2.3'    # Update all packages but force copyq with explicit version
-./update_all.ps1 -ForcedPackages 'libreoffice-streams\fresh:6.1.0]'    # Update all packages but force libreoffice-streams package to update stream `fresh` with explicit version `6.1.0`.
-./update_all.ps1 -Root 'c:\packages'              # Update all packages in the c:\packages folder
+./Update-Packages.ps1 -Name a*                         # Update all packages which name start with letter 'a'
+./Update-Packages.ps1 -ForcedPackages 'cpu-z copyq'    # Update all packages and force cpu-z and copyq
+./Update-Packages.ps1 -ForcedPackages 'copyq:1.2.3'    # Update all packages but force copyq with explicit version
+./Update-Packages.ps1 -ForcedPackages 'libreoffice-streams\fresh:6.1.0]'    # Update all packages but force libreoffice-streams package to update stream `fresh` with explicit version `6.1.0`.
+./Update-Packages.ps1 -Root 'c:\packages'              # Update all packages in the c:\packages folder
 ```
 
-The following global variables influence the execution of `update_all.ps1` script if set prior to the call:
+The following global variables influence the execution of `Update-Packages.ps1` script if set prior to the call:
 
 ```powershell
 $au_NoPlugins = $true        #Do not execute plugins
 $au_Push      = $false       #Do not push to chocolatey
 ```
 
-You can also call AU method `Update-AUPackages` (alias `updateall`) on its own in the repository root. This will just run the updater for the each package without any other option from `update_all.ps1` script. For example to force update of all packages with a single command execute:
+You can also call AU method `Update-AUPackages` (alias `updateall`) on its own in the repository root. This will just run the updater for the each package without any other option from `Update-Packages.ps1` script. For example to force update of all packages with a single command execute:
 
     updateall -Options ([ordered]@{ Force = $true })
 
@@ -96,9 +96,9 @@ You can force the update of all or subset of packages to see how they behave whe
 
 
 ```powershell
-./test_all.ps1                            # Test force update on all packages
-./test_all.ps1 'cdrtfe','freecad', 'p*'   # Test force update on only given packages
-./test_all.ps1 'random 3'                 # Split packages in 3 groups and randomly select and test 1 of those each time
+./Test-Packages.ps1                            # Test force update on all packages
+./Test-Packages.ps1 'cdrtfe','freecad', 'p*'   # Test force update on only given packages
+./Test-Packages.ps1 'random 3'                 # Split packages in 3 groups and randomly select and test 1 of those each time
 ```
 
 
@@ -106,7 +106,7 @@ You can force the update of all or subset of packages to see how they behave whe
 
 ## Pushing To Community Repository Via Commit Message
 
-You can force package update and push using git commit message. AppVeyor build is set up to pass arguments from the commit message to the `./update_all.ps1` script.
+You can force package update and push using git commit message. AppVeyor build is set up to pass arguments from the commit message to the `./Update-Packages.ps1` script.
 
 If commit message includes `[AU <forced_packages>]` message on the first line, the `forced_packages` string will be sent to the updater.
 

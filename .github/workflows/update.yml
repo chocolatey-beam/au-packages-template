@@ -19,9 +19,9 @@ jobs:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       - shell: pwsh
         run: Install-Module -Name Chocolatey-AU -Force -Scope CurrentUser
-      - name: update_all.ps1
+      - name: Update-Packages.ps1
         shell: pwsh
-        run: ${{ github.workspace }}\update_all.ps1
+        run: ${{ github.workspace }}\Update-Packages.ps1
       - if: always()
         shell: pwsh
         run: |
