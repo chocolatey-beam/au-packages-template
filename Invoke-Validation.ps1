@@ -29,7 +29,7 @@ foreach ($file in $filesToCheck)
 {
     Write-Information "Analyzing $($file.Name)..."
     $results = Invoke-ScriptAnalyzer -Path $file.FullName -Settings $settingsPath
-    
+
     if ($results)
     {
         $allPassed = $false

@@ -22,7 +22,7 @@ function global:au_GetLatest
     $download_page = Invoke-WebRequest -UseBasicParsing -Uri $releases
 
     $re = '\.exe$'
-    $url = $download_page.links | Where-Object href -Match $re | Select-Object -First 1 -expand href
+    $url = $download_page.links | Where-Object href -Match $re | Select-Object -First 1 -ExpandProperty href
 
     $version = ($url -split '/' | Select-Object -Last 1 -Skip 1)
 
