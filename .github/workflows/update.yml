@@ -1,0 +1,30 @@
+name: update-au-packages
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 5 * * 0'  # Weekly on Sunday at 5:30 AM UTC
+permissions:
+  contents: write
+jobs:
+  update:
+    runs-on: windows-latest
+    env:
+      au_Push: 'true'
+      GH_TOKEN: ${{ github.token }}
+      github_api_key: ${{ secrets.API_KEY }}
+      api_key: ${{ secrets.CHOCOLATEY_API_KEY }}
+      gist_id: YOUR_GIST_ID_HERE
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - shell: pwsh
+        run: Install-Module -Name Chocolatey-AU -Force -Scope CurrentUser
+      - name: update_all.ps1
+        shell: pwsh
+        run: ${{ github.workspace }}\update_all.ps1
+      - if: always()
+        shell: pwsh
+        run: |
+          Write-Host "=== Update Summary ==="
+          if (Test-Path Update-AUPackages.md) {
+            Get-Content Update-AUPackages.md
+          }
