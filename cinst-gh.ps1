@@ -11,13 +11,14 @@
    Example:
      Invoke-WebRequest https://goo.gl/SZ9c3m | Invoke-Expression; cinst-gh furmark --force
 #>
-function cinst-gh {
+function cinst-gh
+{
     $Repo = "https://github.com/majkinetor/au-packages/tree/master"
 
     $name = $args[0]
     $download_page = Invoke-WebRequest $Repo/$name -UseBasicParsing
     $url = $download_page.Links.href -like '*.nupkg'
-    $p = $url -split '/' | Select-Object -last 1
+    $p = $url -split '/' | Select-Object -Last 1
 
     $raw = $Repo -replace 'github.com', 'rawgit.com' -replace 'tree/'
     Invoke-WebRequest "$raw/$(($p -split '\.')[0])/$p" -OutFile $p

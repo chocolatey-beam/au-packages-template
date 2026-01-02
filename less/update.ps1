@@ -2,16 +2,18 @@ Import-Module Chocolatey-AU
 
 $releases = 'http://guysalias.tk/misc/less/'
 
-function global:au_SearchReplace {
+function global:au_SearchReplace
+{
     @{
         ".\tools\VERIFICATION.txt" = @{
-          "(?i)(\s+x32:).*"        = "`${1} $($Latest.URL32)"
-          "(?i)(checksum32:).*"    = "`${1} $($Latest.Checksum32)"
+            "(?i)(\s+x32:).*" = "`${1} $($Latest.URL32)"
+            "(?i)(checksum32:).*" = "`${1} $($Latest.Checksum32)"
         }
     }
 }
 
-function global:au_BeforeUpdate {
+function global:au_BeforeUpdate
+{
     Set-Alias 7z $Env:chocolateyInstall\tools\7z.exe
 
     $lessdir = "$PSScriptRoot\less-*-win*"
@@ -26,21 +28,25 @@ function global:au_BeforeUpdate {
     Remove-Item $PSScriptRoot\less.7z -ErrorAction Ignore
 }
 
-function global:au_GetLatest {
+function global:au_GetLatest
+{
     $download_page = Invoke-WebRequest -Uri $releases -UseBasicParsing
 
-    $re  = 'less-.+win.+\.7z$'
-    $url = $download_page.links | Where-Object href -match $re | Select-Object -First 1 -expand href
+    $re = 'less-.+win.+\.7z$'
+    $url = $download_page.links | Where-Object href -Match $re | Select-Object -First 1 -expand href
     $version = "$( ($url -split '-' | Select-Object -Index 1) / 100 )"
     @{
-       URL32   = $releases + $url
-       Version = $version
+        URL32 = $releases + $url
+        Version = $version
     }
 }
 
-try {
+try
+{
     update -ChecksumFor none
-} catch {
+}
+catch
+{
     $ignore = 'Unable to connect to the remote server'
     if ($_ -match $ignore) { Write-Information $ignore; 'ignore' }  else { throw $_ }
 }

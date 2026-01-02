@@ -5,7 +5,8 @@ param( [string[]] $Name, [string] $Root = "$PSScriptRoot" )
 if (Test-Path $PSScriptRoot/update_vars.ps1) { . $PSScriptRoot/update_vars.ps1 }
 $global:au_root = Resolve-Path $Root
 
-if (($Name.Length -gt 0) -and ($Name[0] -match '^random (.+)')) {
+if (($Name.Length -gt 0) -and ($Name[0] -match '^random (.+)'))
+{
     [array] $lsau = lsau
 
     $group = [int]$Matches[1]
@@ -13,15 +14,15 @@ if (($Name.Length -gt 0) -and ($Name[0] -match '^random (.+)')) {
     Write-Information "TESTING GROUP $($n+1) of $group"
 
     $group_size = [int]($lsau.Count / $group) + 1
-    $Name = $lsau | Select-Object -First $group_size -Skip ($group_size*$n) | ForEach-Object { $_.Name }
+    $Name = $lsau | Select-Object -First $group_size -Skip ($group_size * $n) | ForEach-Object { $_.Name }
 
     Write-Information ($Name -join ' ')
-    Write-Information ('-'*80)
+    Write-Information ('-' * 80)
 }
 
 $options = [ordered]@{
-    Force   = $true
-    Push    = $false
+    Force = $true
+    Push = $false
     Threads = 10
 
     IgnoreOn = @(                                      #Error message parts to set the package ignore status
@@ -44,24 +45,24 @@ $options = [ordered]@{
         'An exception occurred during a WebClient request'
         'Job returned no object, Vector smash ?'
     )
-    RepeatSleep   = 60                                      #How much to sleep between repeats in seconds, by default 0
-    RepeatCount   = 2                                       #How many times to repeat on errors, by default 1
+    RepeatSleep = 60                                      #How much to sleep between repeats in seconds, by default 0
+    RepeatCount = 2                                       #How many times to repeat on errors, by default 1
 
     Report = @{
         Type = 'markdown'                                   #Report type: markdown or text
         Path = "$PSScriptRoot\Update-Force-Test-${n}.md"    #Path where to save the report
-        Params= @{                                          #Report parameters:
+        Params = @{                                          #Report parameters:
             Github_UserRepo = $Env:github_user_repo         #  Markdown: shows user info in upper right corner
-            NoAppVeyor  = $true                             #  Markdown: do not show AppVeyor build shield
-            Title       = "Update Force Test - Group ${n}"
+            NoAppVeyor = $true                             #  Markdown: do not show AppVeyor build shield
+            Title = "Update Force Test - Group ${n}"
             UserMessage = "[Ignored](#ignored) | [Update report](https://gist.github.com/$Env:gist_id)"       #  Markdown, Text: Custom user message to show
         }
     }
 
     Gist = @{
-        Id     = $Env:gist_id_test                          #Your gist id; leave empty for new private or anonymous gist
+        Id = $Env:gist_id_test                          #Your gist id; leave empty for new private or anonymous gist
         ApiKey = $Env:github_api_key                        #Your github api key - if empty anoymous gist is created
-        Path   = "$PSScriptRoot\Update-Force-Test-${n}.md"  #List of files to add to the gist
+        Path = "$PSScriptRoot\Update-Force-Test-${n}.md"  #List of files to add to the gist
         Description = "Update Force Test Report #powershell #chocolatey"
     }
 }
@@ -71,6 +72,7 @@ $global:info = updateall -Name $Name -Options $Options
 
 $au_errors = $global:info | Where-Object { $_.Error } | Select-Object -ExpandProperty Error
 
-if ($ThrowOnErrors -and $au_errors.Count -gt 0) {
+if ($ThrowOnErrors -and $au_errors.Count -gt 0)
+{
     throw 'Errors during update'
 }
