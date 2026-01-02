@@ -9,20 +9,20 @@
      - Pass any cinst option after that (some may not work ofc. such as `version`)
 
    Example:
-     iwr https://goo.gl/SZ9c3m | iex; cinst-gh furmark --force
+     Invoke-WebRequest https://goo.gl/SZ9c3m | Invoke-Expression; cinst-gh furmark --force
 #>
 function cinst-gh {
     $Repo = "https://github.com/majkinetor/au-packages/tree/master"
 
     $name = $args[0]
-    $download_page = iwr $Repo/$name -UseBasicParsing
+    $download_page = Invoke-WebRequest $Repo/$name -UseBasicParsing
     $url = $download_page.Links.href -like '*.nupkg'
-    $p = $url -split '/' | select -last 1
+    $p = $url -split '/' | Select-Object -last 1
 
     $raw = $Repo -replace 'github.com', 'rawgit.com' -replace 'tree/'
-    iwr "$raw/$(($p -split '\.')[0])/$p" -Out $p
-    $a = $args | select -Skip 1
+    Invoke-WebRequest "$raw/$(($p -split '\.')[0])/$p" -OutFile $p
+    $a = $args | Select-Object -Skip 1
     $cmd = "cinst $p $a"
-    Write-Host $cmd; iex $cmd
-    rm $p
+    Write-Information $cmd; Invoke-Expression $cmd
+    Remove-Item $p
 }
