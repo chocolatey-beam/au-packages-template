@@ -1,9 +1,9 @@
 name: update-au-packages
-# Uncomment the 'on' section below after forking to enable the workflow
-# on:
-#   workflow_dispatch:  # Manual trigger
-#   schedule:
-#     - cron: '30 5 * * 0'  # Weekly on Sunday at 5:30 AM UTC
+Uncomment the 'on' section below after forking to enable the workflow
+on:
+  workflow_dispatch:  # Manual trigger
+  schedule:
+    - cron: '30 5 * * 0'  # Weekly on Sunday at 5:30 AM UTC
 permissions:
   contents: write
 jobs:
